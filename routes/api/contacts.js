@@ -6,6 +6,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../../models/contacts");
 const { contactSchema } = require("../../validation/contactsValidation");
 
@@ -36,9 +37,11 @@ router.get("/:contactId", async (req, res, next) => {
 // POST /api/contacts
 router.post("/", async (req, res, next) => {
   try {
+   
     await contactSchema.validateAsync(req.body);
-    const { name, email, phone } = req.body;
-    const newContact = await addContact({ name, email, phone });
+    const { name, email, phone, favorite } = req.body;
+    const newContact = await addContact({ name, email, phone, favorite });
+
     res.status(201).json(newContact);
   } catch (error) {
     if (error.isJoi) {
@@ -76,6 +79,28 @@ router.delete("/:contactId", async (req, res, next) => {
       return res.status(404).json({ message: "Not found" });
     }
     res.status(200).json({ message: "contact deleted" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// PATCH /api/contacts/:contactId/favorite
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    const { favorite } = req.body;
+    const { contactId } = req.params;
+
+    if (favorite === undefined) {
+      return res.status(400).json({ message: "missing field favorite" });
+    }
+
+    const updated = await updateStatusContact(contactId, { favorite });
+
+    if (!updated) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.status(200).json(updated);
   } catch (error) {
     next(error);
   }

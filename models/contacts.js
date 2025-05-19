@@ -1,7 +1,7 @@
 const Contact = require("./contactModel");
 
-const listContacts = async () => {
-  return await Contact.find();
+const listContacts = async ({ filter = {}, skip = 0, limit = 20 }) => {
+  return await Contact.find(filter).skip(skip).limit(limit);
 };
 
 const getContactById = async (contactId) => {

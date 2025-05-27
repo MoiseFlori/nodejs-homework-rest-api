@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    container_name: contacts-app
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_URI=${DB_URI}
+    

@@ -5,5 +5,5 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DB_URI=mongodb+srv://moiseflori19:moiseflori19@cluster0.4hqm5d6.mongodb.net/db-contacts?retryWrites=true&w=majority
+      - DB_URI=${DB_URI}
     

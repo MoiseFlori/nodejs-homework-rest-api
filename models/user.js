@@ -22,6 +22,19 @@ const userSchema = new Schema({
   avatarURL: {
     type: String,
   },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [
+      function () {
+        return this.verify === false;
+      },
+      "Verify token is required",
+    ],
+  },
 });
 
 module.exports = model("user", userSchema);
